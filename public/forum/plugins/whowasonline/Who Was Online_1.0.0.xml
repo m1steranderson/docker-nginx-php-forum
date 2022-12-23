@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin name="Who Was Online" version_long="10000" version_human="1.0.0" author="IPS Themes" website="https://www.ipsthemes.com" update_check="https://www.ipsthemes.com/development/plugins/wwo42.php"><hooks/><settings><setting><key>who_was_online_hours</key><default>24</default></setting><setting><key>who_was_online_who_can_see</key><default/></setting><setting><key>who_was_online_show_stat</key><default>0</default></setting><setting><key>who_was_online_max_user</key><default/></setting><setting><key>who_was_online_ex_groups</key><default/></setting><setting><key>who_was_online_order_by</key><default/></setting><setting><key>who_was_online_order_sort</key><default/></setting></settings><widgets><widget key="whowasonline" class="\IPS\Widget" restrict="sidebar,cms" default_area="" allow_reuse="" menu_style="modal" embeddable=""><![CDATA[<?php
+/**
+ * @brief		whowasonline Widget
+ * @author		<a href='https://www.invisioncommunity.com'>Invision Power Services, Inc.</a>
+ * @copyright	(c) Invision Power Services, Inc.
+ * @license		https://www.invisioncommunity.com/legal/standards/
+ * @package		Invision Community
+ * @subpackage	whowasonline
+ * @since		02 Aug 2017
+ */
+
+namespace IPS\plugins\<{LOCATION}>\widgets;
+
+/* To prevent PHP errors (extending class does not exist) revealing path */
+if ( !defined( '\IPS\SUITE_UNIQUE_KEY' ) )
+{
+	header( ( isset( $_SERVER['SERVER_PROTOCOL'] ) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0' ) . ' 403 Forbidden' );
+	exit;
+}
+
+/**
+ * whowasonline Widget
+ */
+class _whowasonline extends \IPS\Widget
+{
+	/**
+	 * @brief	Widget Key
+	 */
+	public $key = 'whowasonline';
+	
+	/**
+	 * @brief	App
+	 */
+	
+		
+	/**
+	 * @brief	Plugin
+	 */
+	public $plugin = '<{ID}>';
+	
+	/**
+	 * Initialise this widget
+	 *
+	 * @return void
+	 */ 
+	public function init()
+	{
+		$this->template( array( \IPS\Theme::i()->getTemplate( 'plugins', 'core', 'global' ), $this->key ) );
+		
+		parent::init();
+	}
+	
+	/**
+	 * Specify widget configuration
+	 *
+	 * @param	null|\IPS\Helpers\Form	$form	Form object
+	 * @return	null|\IPS\Helpers\Form
+	 */
+	public function configuration( &$form=null )
+	{
+ 		if ( $form === null )
+		{
+	 		$form = new \IPS\Helpers\Form;
+ 		}
+
+		$form->add( new \IPS\Helpers\Form\Number( 'who_was_online_hours', isset( $this->configuration['who_was_online_hours'] ) ? $this->configuration['who_was_online_hours'] : 24, TRUE ) );
+		$form->add( new \IPS\Helpers\Form\Select( 'who_was_online_who_can_see', isset( $this->configuration['who_was_online_who_can_see'] ) ? $this->configuration['who_was_online_who_can_see'] : '*', TRUE, array( 'options' => \IPS\Member\Group::groups(), 'parse' => 'normal', 'multiple' => true, 'unlimited' => '*', 'unlimitedLang' => 'everyone' ) ) );
+		$form->add( new \IPS\Helpers\Form\YesNo( 'who_was_online_show_stat', isset( $this->configuration['who_was_online_show_stat'] ) ? $this->configuration['who_was_online_show_stat'] : 0, TRUE) );
+		$form->add( new \IPS\Helpers\Form\Number( 'who_was_online_max_user', isset( $this->configuration['who_was_online_max_user'] ) ? $this->configuration['who_was_online_max_user'] : '', FALSE ) );
+		$form->add( new \IPS\Helpers\Form\Select( 'who_was_online_ex_groups', isset( $this->configuration['who_was_online_ex_groups'] ) ? $this->configuration['who_was_online_ex_groups'] : '', FALSE, array( 'options' => \IPS\Member\Group::groups(), 'parse' => 'normal', 'multiple' => true ) ) );
+		$form->add( new \IPS\Helpers\Form\Select( 'who_was_online_order_by', isset( $this->configuration['who_was_online_order_by'] ) ? $this->configuration['who_was_online_order_by'] : 'visit', TRUE, array( 'options' => array('name' => 'who_was_online_name', 'group' => 'who_was_online_group', 'visit' => 'who_was_online_last_visit'), 'multiple' => FALSE ) ) );
+		$form->add( new \IPS\Helpers\Form\Radio( 'who_was_online_order_sort', isset( $this->configuration['who_was_online_order_sort'] ) ? $this->configuration['who_was_online_order_sort'] : 'desc', TRUE, array( 'options' => array('desc' => 'who_was_online_desc', 'asc' => 'who_was_online_asc') ) ) ); 		
+
+ 		return $form;
+ 	} 
+ 	
+ 	 /**
+ 	 * Ran before saving widget configuration
+ 	 *
+ 	 * @param	array	$values	Values from form
+ 	 * @return	array
+ 	 */
+ 	public function preConfig( $values )
+ 	{
+ 		return $values;
+ 	}
+
+	/**
+	 * Render a widget
+	 *
+	 * @return	string
+	 */
+	 
+	public function render()
+	{
+		$this->configuration['who_was_online_hours'] 				= isset($this->configuration['who_was_online_hours']) ?$this->configuration['who_was_online_hours']: 24;
+		$this->configuration['who_was_online_who_can_see'] 			= isset($this->configuration['who_was_online_who_can_see']) ?$this->configuration['who_was_online_who_can_see']: '*';
+		$this->configuration['who_was_online_max_user'] 			= isset($this->configuration['who_was_online_max_user']) ?$this->configuration['who_was_online_max_user']: '';
+		$this->configuration['who_was_online_ex_groups'] 			= isset($this->configuration['who_was_online_ex_groups']) ?$this->configuration['who_was_online_ex_groups']: array();
+		$this->configuration['who_was_online_order_by'] 			= isset($this->configuration['who_was_online_order_by']) ?$this->configuration['who_was_online_order_by']: 'visit';
+		$this->configuration['who_was_online_order_sort'] 			= isset($this->configuration['who_was_online_order_sort']) ?$this->configuration['who_was_online_order_sort']: 'desc';
+		$this->configuration['who_was_online_show_stat'] 			= isset($this->configuration['who_was_online_show_stat']) ?$this->configuration['who_was_online_show_stat']: 0;
+
+		if ( $this->configuration['who_was_online_who_can_see'] != '*' && !\IPS\Member::loggedIn()->inGroup( $this->configuration['who_was_online_who_can_see'], TRUE ) ) {
+			return "";
+		}
+
+		switch($this->configuration['who_was_online_order_by']) {
+			case 'name':
+				$order_by = 'name';
+			break;
+			case 'group':
+				$order_by = 'member_group_id';
+			break;
+				$order_by = 'last_activity';
+			break;
+			case 'visit':
+			default:
+				$order_by = 'last_activity';
+			break;
+		}
+
+		$order_type = $this->configuration['who_was_online_order_sort'] == 'desc' ? 'DESC' : 'ASC';
+
+		$where = array(
+			array( 'last_activity>' . \IPS\DateTime::create()->sub( new \DateInterval( 'PT' . $this->configuration['who_was_online_hours'] . 'H' ) )->getTimeStamp())
+		);
+
+		if(count($this->configuration['who_was_online_ex_groups'])) {
+			$where[] = array( 'member_group_id NOT IN(' . implode(',', $this->configuration['who_was_online_ex_groups']) . ')' );
+		}
+
+		$members = iterator_to_array( \IPS\Db::i()->select( array( 'member_id', 'name', 'members_seo_name', 'member_group_id' ), 'core_members', $where, "{$order_by} {$order_type}" )->setKeyField( 'member_id' ) );
+
+		$memberCount = count($members);
+
+		if(!isset(\IPS\Data\Store::i()->who_was_online_stat_count) || $memberCount > \IPS\Data\Store::i()->who_was_online_stat_count) {
+			\IPS\Data\Store::i()->who_was_online_stat_count = $memberCount;
+			\IPS\Data\Store::i()->who_was_online_stat_time = \IPS\DateTime::create()->getTimeStamp();
+		}
+
+		$stat = false;
+		if($this->configuration['who_was_online_show_stat']) {
+			$stat = \IPS\Member::loggedIn()->language()->addToStack('who_was_online_stat', false, array( 'sprintf' => array($this->configuration['who_was_online_hours'], \IPS\Data\Store::i()->who_was_online_stat_count), 'htmlsprintf' => array(\IPS\DateTime::ts(\IPS\Data\Store::i()->who_was_online_stat_time)->html())));
+		}
+
+		if($this->configuration['who_was_online_max_user'] > 0) {
+			$members = array_slice($members, 0, $this->configuration['who_was_online_max_user']);
+		}
+
+		return $this->output($members, $memberCount, $this->configuration['who_was_online_hours'], $stat);
+	}
+}]]></widget></widgets><htmlFiles><html filename="whowasonline.phtml">PGlwczp0ZW1wbGF0ZSBwYXJhbWV0ZXJzPSIkbWVtYmVycywgJG1lbWJlckNvdW50LCAkaG91ciwgJHN0YXQsICRvcmllbnRhdGlvbj0ndmVydGljYWwnIiAvPgo8aDMgY2xhc3M9J2lwc1R5cGVfcmVzZXQgaXBzV2lkZ2V0X3RpdGxlJz4KCXtsYW5nPSJibG9ja193aG93YXNvbmxpbmUifSAJCgl7e2lmICRvcmllbnRhdGlvbiA9PSAnaG9yaXpvbnRhbCd9fSZuYnNwOyZuYnNwOzxzcGFuIGNsYXNzPSdpcHNUeXBlX2xpZ2h0IGlwc1R5cGVfdW5ib2xkIGlwc1R5cGVfbWVkaXVtJz57bGFuZz0id2hvX3dhc19vbmxpbmVfbGFzdF94IiBzcHJpbnRmPSIkaG91ciIgcGx1cmFsaXplPSIkbWVtYmVyQ291bnQifTwvc3Bhbj4gCQoJe3tlbmRpZn19Cgl7e2lmICRzdGF0ICE9PSBmYWxzZSAmJiAkb3JpZW50YXRpb24hPSd2ZXJ0aWNhbCd9fQoJCSZuYnNwOyZuYnNwOyg8c3BhbiBjbGFzcz0naXBzVHlwZV9saWdodCBpcHNUeXBlX3VuYm9sZCBpcHNUeXBlX21lZGl1bSc+eyRzdGF0fHJhd308L3NwYW4+KQoJe3tlbmRpZn19CgkKPC9oMz4KPGRpdiBjbGFzcz0naXBzV2lkZ2V0X2lubmVyIGlwc1BhZCc+Cgl7e2lmICRtZW1iZXJDb3VudH19CgkJPHVsIGNsYXNzPSdpcHNMaXN0X2lubGluZSBpcHNMaXN0X2NzdiBpcHNMaXN0X25vU3BhY2luZyc+CgkJCXt7Zm9yZWFjaCAkbWVtYmVycyBhcyAkcm93fX0KCQkJCTxsaT57dGVtcGxhdGU9InVzZXJMaW5rRnJvbURhdGEiIGdyb3VwPSJnbG9iYWwiIGFwcD0iY29yZSIgcGFyYW1zPSIkcm93WydtZW1iZXJfaWQnXSwgJHJvd1snbmFtZSddLCAkcm93WydtZW1iZXJzX3Nlb19uYW1lJ10sICRyb3dbJ21lbWJlcl9ncm91cF9pZCddIn08L2xpPgoJCQl7e2VuZGZvcmVhY2h9fQoJCTwvdWw+CgkJe3tpZiAkb3JpZW50YXRpb24gPT0gJ3ZlcnRpY2FsJyBhbmQgJG1lbWJlckNvdW50ID4gNjB9fQoJCQk8cCBjbGFzcz0naXBzVHlwZV9tZWRpdW0gaXBzVHlwZV9yZXNldCc+CgkJCQk8YSBocmVmPSd7dXJsPSJhcHA9Y29yZSZtb2R1bGU9b25saW5lJmNvbnRyb2xsZXI9b25saW5lIiBzZW9UZW1wbGF0ZT0ib25saW5lIn0nPntsYW5nPSJhbmRfeF9vdGhlcnMiIHBsdXJhbGl6ZT0iJG1lbWJlckNvdW50IC0gNjAifTwvYT4KCQkJPC9wPgoJCXt7ZW5kaWZ9fQoJe3tlbHNlfX0KCQk8cCBjbGFzcz0naXBzVHlwZV9yZXNldCBpcHNUeXBlX21lZGl1bSBpcHNUeXBlX2xpZ2h0Jz57bGFuZz0id2hvX3dhc19vbmxpbmVfdXNlcnNfZW1wdHkifTwvcD4KCXt7ZW5kaWZ9fQo8L2Rpdj4=</html></htmlFiles><cssFiles/><jsFiles/><resourcesFiles/><lang><word key="block_whowasonline" js="0">Who Was Online</word><word key="block_whowasonline_desc" js="0">Shows users who were online in a duration</word><word key="who_was_online_last_x" js="0">{# [1:User was][?:Users were]} Online in the Last %s Hours</word><word key="who_was_online_users_empty" js="0">There is no users online</word><word key="who_was_online_hours" js="0">Show Online users for how many hours ago?</word><word key="who_was_online_who_can_see" js="0">Who Can See</word><word key="who_was_online_show_stat" js="0">Show Stat</word><word key="who_was_online_show_stat_desc" js="0">Display the 'Most members ever online...' stat</word><word key="who_was_online_max_user" js="0">Limit maximum number of users link</word><word key="who_was_online_ex_groups" js="0">Groups to exclude from the list</word><word key="who_was_online_order_by" js="0">Order Users Link By</word><word key="who_was_online_stat" js="0">Most members ever online in %s hour was %s, last accomplished on %s.</word><word key="who_was_online_last_visit" js="0">Last Visit</word><word key="who_was_online_group" js="0">Member Group</word><word key="who_was_online_name" js="0">Member Name</word><word key="who_was_online_order_sort" js="0">Sort Type</word><word key="who_was_online_desc" js="0">Descending</word><word key="who_was_online_asc" js="0">Ascending</word></lang><versions><version long="10000" human="1.0.0"><![CDATA[//<?php
+
+
+/* To prevent PHP errors (extending class does not exist) revealing path */
+if ( !defined( '\IPS\SUITE_UNIQUE_KEY' ) )
+{
+	header( ( isset( $_SERVER['SERVER_PROTOCOL'] ) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0' ) . ' 403 Forbidden' );
+	exit;
+}
+
+/**
+ * Install Code
+ */
+class ips_plugins_setup_install
+{
+	/**
+	 * ...
+	 *
+	 * @return	array	If returns TRUE, upgrader will proceed to next step. If it returns any other value, it will set this as the value of the 'extra' GET parameter and rerun this step (useful for loops)
+	 */
+	public function step1()
+	{
+		
+
+		return TRUE;
+	}
+	
+	// You can create as many additional methods (step2, step3, etc.) as is necessary.
+	// Each step will be executed in a new HTTP request
+}]]></version></versions></plugin>

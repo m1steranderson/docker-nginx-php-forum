@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin name="Languages Flags on Board Top" version_long="10001" version_human="1.0.1" author="Adriano Faria" website="http://www.sosinvision.com.br" update_check="http://forum.sosinvision.com.br/index.php?/versions/plugins/languages-flags-on-board-top/"><hooks><hook type="S" class="\IPS\Theme\class_core_front_global" filename="langboardtop"><![CDATA[//<?php
+
+class hook590 extends _HOOK_CLASS_
+{
+
+/* !Hook Data - DO NOT REMOVE */
+public static function hookData() {
+ return array_merge_recursive( array (
+  'userBar' => 
+  array (
+    0 => 
+    array (
+      'selector' => '#elUserNav',
+      'type' => 'add_inside_end',
+      'content' => '{{if ( \IPS\Settings::i()->site_online || \IPS\Member::loggedIn()->group[\'g_access_offline\'] ) and ( \IPS\Dispatcher::i()->application instanceof \IPS\Application AND \IPS\Dispatcher::i()->application->canAccess() )}}
+	{template="langBoardTop" group="plugins" location="global" app="core" params=""}
+{{endif}}',
+    ),
+  ),
+), parent::hookData() );
+}
+/* End Hook Data */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}]]></hook></hooks><settings><setting><key>langboardtop_type</key><default>flags</default></setting></settings><settingsCode><![CDATA[//<?php
+
+$form->add( new \IPS\Helpers\Form\Select( 'langboardtop_type', \IPS\Settings::i()->langboardtop_type, TRUE, array( 'options' => array( 'flags' => 'langboardtop_flags', 'dropdown' => 'langboardtop_dropdown' ) ) ) );
+
+if ( $values = $form->values() )
+{
+	$form->saveAsSettings();
+	return TRUE;
+}
+
+return $form;]]></settingsCode><htmlFiles><html filename="langBoardTop.phtml">PGlwczp0ZW1wbGF0ZSBwYXJhbWV0ZXJzPSIiIC8+Cnt7JGxhbmd1YWdlcyA9IFxJUFNcTGFuZzo6Z2V0RW5hYmxlZExhbmd1YWdlcygpO319Cnt7aWYgY291bnQoICRsYW5ndWFnZXMgKSA+IDF9fQoJe3tpZiBcSVBTXFNldHRpbmdzOjppKCktPmxhbmdib2FyZHRvcF90eXBlID09ICJmbGFncyJ9fQoJCTxsaSBjbGFzcz0nZWxVc2VyTmF2X3NlcCc+PC9saT4KCQkJPGxpPgoJCQkJPHVsIGNsYXNzPSdpcHNMaXN0X2lubGluZSc+CgkJCQkJe3tmb3JlYWNoICRsYW5ndWFnZXMgYXMgJGlkID0+ICRsYW5nIH19CgkJCQkJCTxsaT4KCQkJCQkJCXt7JHVybCA9IFxJUFNcSHR0cFxVcmw6OmludGVybmFsKCAnYXBwPWNvcmUmbW9kdWxlPXN5c3RlbSZjb250cm9sbGVyPWxhbmd1YWdlJmlkPScuJGlkLCAnZnJvbnQnICktPmNzcmYoKTt9fQoJCQkJCQkJPGEgZGF0YS1pcHNUb29sdGlwIGRhdGEtaXBzVG9vbHRpcC1sYWJlbD0iIHskbGFuZy0+dGl0bGV9IiBocmVmPSd7JHVybH0nPjxpIGNsYXNzPSd7JGxhbmctPmdldF9faWNvbigpfSc+PC9pPjwvYT4KCQkJCQkJPC9saT4KCQkJCQl7e2VuZGZvcmVhY2h9fQoJCQkJPC91bD4KCQkJPC9saT4KCQk8L2xpPgoJe3tlbHNlfX0KCQk8bGk+CgkJCTxhIGhyZWY9JyNlbE5hdkxhbmdfbWVudScgaWQ9J2VsTmF2TGFuZycgZGF0YS1pcHNNZW51IGRhdGEtaXBzTWVudS1hYm92ZT57bGFuZz0nbGFuZ3VhZ2UnfSA8aSBjbGFzcz0nZmEgZmEtY2FyZXQtZG93bic+PC9pPjwvYT4KCQkJPHVsIGlkPSdlbE5hdkxhbmdfbWVudScgY2xhc3M9J2lwc01lbnUgaXBzTWVudV9zZWxlY3RhYmxlIGlwc0hpZGUnPgoJCQl7e2ZvcmVhY2ggJGxhbmd1YWdlcyBhcyAkaWQgPT4gJGxhbmcgfX0KCQkJCTxsaSBjbGFzcz0naXBzTWVudV9pdGVte3tpZiBcSVBTXE1lbWJlcjo6bG9nZ2VkSW4oKS0+bGFuZ3VhZ2UoKS0+aWQgPT0gJGlkIHx8ICggJGxhbmctPmRlZmF1bHQgJiYgXElQU1xNZW1iZXI6OmxvZ2dlZEluKCktPmxhbmd1YWdlID09PSAwICl9fSBpcHNNZW51X2l0ZW1DaGVja2Vke3tlbmRpZn19Jz4KCQkJCQk8Zm9ybSBhY3Rpb249Int1cmw9ImFwcD1jb3JlJm1vZHVsZT1zeXN0ZW0mY29udHJvbGxlcj1sYW5ndWFnZSIgbm9wcm90b2NvbD0idHJ1ZSIgY3NyZj0idHJ1ZSIgc2VvVGVtcGxhdGU9Imxhbmd1YWdlIn0iIG1ldGhvZD0icG9zdCI+CgkJCQkJPGJ1dHRvbiB0eXBlPSdzdWJtaXQnIG5hbWU9J2lkJyB2YWx1ZT0neyRpZH0nIGNsYXNzPSdpcHNCdXR0b24gaXBzQnV0dG9uX2xpbmsnPnt7aWYgJGxhbmctPmdldF9faWNvbigpfX08aSBjbGFzcz0neyRsYW5nLT5nZXRfX2ljb24oKX0nPjwvaT4ge3tlbmRpZn19eyRsYW5nLT50aXRsZX0ge3tpZiAkbGFuZy0+ZGVmYXVsdH19e2xhbmc9ImRlZmF1bHQifXt7ZW5kaWZ9fTwvYnV0dG9uPgoJCQkJCTwvZm9ybT4KCQkJCTwvbGk+CgkJCXt7ZW5kZm9yZWFjaH19CgkJCTwvdWw+CgkJPC9saT4KCXt7ZW5kaWZ9fQkKe3tlbmRpZn19</html></htmlFiles><cssFiles/><jsFiles/><resourcesFiles/><lang><word key="langboardtop_type" js="0">Display</word><word key="langboardtop_flags" js="0">Country Flags</word><word key="langboardtop_dropdown" js="0">Languages Dropdown</word></lang><versions><version long="10000" human="1.0.0"><![CDATA[//<?php
+
+
+/* To prevent PHP errors (extending class does not exist) revealing path */
+if ( !defined( '\IPS\SUITE_UNIQUE_KEY' ) )
+{
+	header( ( isset( $_SERVER['SERVER_PROTOCOL'] ) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0' ) . ' 403 Forbidden' );
+	exit;
+}
+
+/**
+ * Install Code
+ */
+class ips_plugins_setup_install
+{
+	/**
+	 * ...
+	 *
+	 * @return	array	If returns TRUE, upgrader will proceed to next step. If it returns any other value, it will set this as the value of the 'extra' GET parameter and rerun this step (useful for loops)
+	 */
+	public function step1()
+	{
+		
+
+		return TRUE;
+	}
+	
+	// You can create as many additional methods (step2, step3, etc.) as is necessary.
+	// Each step will be executed in a new HTTP request
+}]]></version><version long="10001" human="1.0.1"><![CDATA[//<?php
+
+
+/* To prevent PHP errors (extending class does not exist) revealing path */
+if ( !defined( '\IPS\SUITE_UNIQUE_KEY' ) )
+{
+	header( ( isset( $_SERVER['SERVER_PROTOCOL'] ) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0' ) . ' 403 Forbidden' );
+	exit;
+}
+
+/**
+ * 1.0.1 Upgrade Code
+ */
+class ips_plugins_setup_upg_10001
+{
+	/**
+	 * ...
+	 *
+	 * @return	array	If returns TRUE, upgrader will proceed to next step. If it returns any other value, it will set this as the value of the 'extra' GET parameter and rerun this step (useful for loops)
+	 */
+	public function step1()
+	{
+		
+
+		return TRUE;
+	}
+	
+	// You can create as many additional methods (step2, step3, etc.) as is necessary.
+	// Each step will be executed in a new HTTP request
+}]]></version></versions></plugin>

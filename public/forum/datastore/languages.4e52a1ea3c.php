@@ -1,0 +1,5 @@
+<?php
+
+return <<<'VALUE'
+{"1":{"lang_id":1,"lang_short":"en_US","lang_title":"English (USA)","lang_default":1,"lang_isrtl":0,"lang_protected":1,"lang_order":1,"lang_enabled":1,"lang_marketplace_id":null,"lang_update_url":null,"lang_update_check":0,"lang_version":null,"lang_version_long":null,"lang_update_data":null,"lang_author_name":null,"lang_author_url":null},"2":{"lang_id":2,"lang_short":"ru_RU.UTF-8","lang_title":"\u0420\u0443\u0441\u0441\u043a\u0438\u0439 (RU)","lang_default":0,"lang_isrtl":0,"lang_protected":0,"lang_order":2,"lang_enabled":1,"lang_marketplace_id":null,"lang_update_url":"https:\/\/invisionbyte.ru\/lang\/","lang_update_check":1671388350,"lang_version":"4.6.12","lang_version_long":106164,"lang_update_data":"{\"version\":\"4.7.5\",\"longversion\":107502,\"released\":1669746188,\"updateurl\":\"https:\\\/\\\/invisionbyte.ru\\\/files\\\/file\\\/23-russkiy-yazykovoy-paket-dlya-invision-community\\\/\",\"releasenotes\":null}","lang_author_name":"invisionbyte.ru","lang_author_url":"https:\/\/invisionbyte.ru"}}
+VALUE;
